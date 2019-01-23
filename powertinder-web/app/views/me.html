@@ -1,0 +1,34 @@
+<p>
+    {{me.name}}
+    <br>
+    {{me.bio}}
+    <br>
+    {{me.ping_time}}
+    <br>
+    {{me.pos_info.city.name}}
+    <br>
+    LAT: {{me.pos.lat}}
+    <br>
+    LON: {{me.pos.lon}}
+    <br>
+    Distance Filter : {{me.distance_filter}}
+    <br>
+    Age : {{me.age_filter_min}} - {{me.age_filter_max}}
+</p>
+
+<form ng-submit="updatePosition()">
+    <div class="form-group">
+        <label for="lat">Latitude</label>
+        <input type="text" class="form-control" id="lat" placeholder="Latitude" ng-model="pos.lat">
+    </div>
+    <div class="form-group">
+        <label for="lon">Longitude</label>
+        <input type="text" class="form-control" id="lon" placeholder="Longitude" ng-model="pos.lon">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>
+
+<p></p>
+<div class="col-md-6 col-lg-3 col-xl-3" ng-repeat="photo in me.photos">
+    </a><img ng-src="{{photo.processedFiles[0].url}}" class="img-rounded parentimage" />
+</div>

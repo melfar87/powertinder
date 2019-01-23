@@ -1,0 +1,44 @@
+{
+  "location": [
+    {
+      "name": "Paris",
+      "lat": 48.856613,
+      "lon": 2.352222
+    },
+    {
+      "name": "Versailles",
+      "lat": 48.803807,
+      "lon": 2.122307
+    },
+    {
+      "name": "Boulogne",
+        "lat": 48.833112,
+      "lon": 2.243096
+    },
+    {
+      "name": "Viroflay",
+      "lat": 48.802253,
+      "lon": 2.167403
+    },
+    {
+      "name": "London",
+      "lat": 51.507259,
+      "lon": -0.1243823
+    },
+    {
+      "name": "Saint Germain en Laye",
+      "lat": 48.8594659,
+      "lon": 2.0765306
+    },
+    {
+      "name": "Velizy",
+      "lat": 48.7871337,
+      "lon": 2.2235902
+    },
+    {
+      "name": "Montigny",
+      "lat": 48.7390384,
+      "lon": 2.1741492
+    }
+  ]
+}

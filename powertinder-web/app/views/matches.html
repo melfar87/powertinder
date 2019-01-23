@@ -1,0 +1,22 @@
+<div>
+    <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="refresh()">
+        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> REFRESH
+    </button>
+</div>
+<br>
+
+<div class="row top10 col-lg-12 col-md-12" ng-repeat="item in matches">
+    <div class="panel panel-default">
+        <div class="panel-heading">{{item.person.name}} {{item.person.age}}</div>
+        <div class="panel-body">
+
+            <div class="row col-md-12 col-lg-12">
+                <div class="col-md-6 col-lg-3" ng-repeat="photo in item.person.photos">
+                    <img ng-src="{{photo.processedFiles[2].url}}" class="img-rounded" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,26 @@
+tinderapi:
+  baseuri: https://api.gotinder.com
+
+server:
+  servlet:
+    context-path: /
+
+spring:
+  devtools:
+    livereload:
+      enabled: false
+
+# User infos required in order to get the tinder api access_token
+facebook:
+  id:
+  email:
+  password:
+
+---
+spring.profiles: dev
+
+tinderapi:
+  baseuri:
+
+
+
