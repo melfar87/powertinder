@@ -1,5 +1,5 @@
 {
-  "name": "webtinfront",
+  "name": "powertinder-web",
   "private": true,
   "devDependencies": {
     "autoprefixer-core": "^5.2.1",

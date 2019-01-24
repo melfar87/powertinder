@@ -34,7 +34,7 @@ To do so fill in your infos in the `user.yml` config file in the root directory 
 
 * Ensure backend is started then open your browser : http://localhost:9000
 
-* Enjoy !
+* Have fun !
 
 ## Available operations
 The easiest way to view and try the available operations is to start the **powertinder-api** application and check the swagger
