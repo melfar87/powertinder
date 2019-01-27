@@ -37,14 +37,16 @@
         <a class="navbar-brand" href="#/">POWER TINDER</a>
       </div>
 
-      <div class="collapse navbar-collapse" id="js-navbar-collapse">
+      <nav ng-controller="navCtrl">
+        <div class="collapse navbar-collapse" id="js-navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li ng-class="{active : isActive('/')}"><a href="/">Matches</a></li>
+            <li ng-class="{active : isActive('/search')}"><a ng-href="#!/search">Search</a></li>
+            <li ng-class="{active : isActive('/me')}"><a ng-href="#!/me">Me</a></li>
+          </ul>
+        </div>
+    </nav>
 
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="/">Matches</a></li>
-          <li><a ng-href="#!/search">Search</a></li>
-          <li><a ng-href="#!/me">Me</a></li>
-        </ul>
-      </div>
     </div>
   </div>
 </div>
@@ -53,11 +55,13 @@
   <div ng-view></div>
 </div>
 
+<!-- 
 <div class="footer">
   <div class="container">
     <p>FOOTER</p>
   </div>
-</div>
+</div> 
+-->
 
 
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -92,6 +96,8 @@
 <script src="scripts/controllers/main.js"></script>
 <script src="scripts/controllers/matches.js"></script>
 <script src="scripts/controllers/me.js"></script>
+<script src="scripts/controllers/nav.js"></script>
+
 <!-- endbuild -->
 </body>
 </html>
