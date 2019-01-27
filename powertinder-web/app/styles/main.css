@@ -83,6 +83,12 @@ body {
     border-bottom: 0;
   }
 
+  /* loading gif */
+  .loader {
+    width: 32px;
+    height: 32px;
+  }
+
   /* Scale images on hover */
   .parentimage {
     width: 160px;

@@ -2,8 +2,12 @@
     <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="refresh()">
         <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> REFRESH
     </button>
+    <img ng-src="images/spinner.gif" class="loader" ng-show="loading"> 
+<!-- <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> -->
+    
 </div>
 <br>
+
 
 <div class="row top10 col-lg-12 col-md-12" ng-repeat="item in matches">
     <div class="panel panel-default">

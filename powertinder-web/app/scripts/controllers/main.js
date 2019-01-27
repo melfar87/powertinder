@@ -18,10 +18,12 @@ angular.module('webtinFrontApp')
     }
 
     function init($resource, baseUrl, $scope) {
+      $scope.loading = true;
       var Recommendations = $resource(baseUrl + '/user/recs');
       Recommendations.get(function (response) {
         console.log(response);
         $scope.recs = response.results;
+        $scope.loading = false;
       });
     }
 
@@ -30,6 +32,7 @@ angular.module('webtinFrontApp')
       console.log("like " + id);
 
       var Like = $resource(baseUrl + '/user/like/:userId');
+      $scope.loading = true;
 
       Like.get({ userId: id }, function (response) {
         console.log(response);
@@ -43,6 +46,9 @@ angular.module('webtinFrontApp')
         } else {
           found.match = false;
         }
+
+      $scope.loading = false;
+
       })
     }
 
@@ -67,6 +73,7 @@ angular.module('webtinFrontApp')
     $scope.superLike = function (id) {
       console.log('super like : ' + id);
       var SuperLike = $resource(baseUrl + '/user/superlike/:userId');
+      $scope.loading = true;
 
       SuperLike.get({ userId: id }, function (response) {
         console.log(response);
@@ -80,13 +87,17 @@ angular.module('webtinFrontApp')
         } else {
           found.match = false;
         }
-      })
 
+        $scope.loading = false;
+
+      })
     }
 
     // pass
     $scope.pass = function (id) {
       console.log("pass " + id);
+
+      $scope.loading = true;
 
       var Pass = $resource(baseUrl + '/user/pass/:userId');
       Pass.get({ userId: id }, function (response) {
@@ -99,6 +110,9 @@ angular.module('webtinFrontApp')
         if (found != undefined) {
           found.match = false;
         }
+
+        $scope.loading = false;
+
       })
     }
 

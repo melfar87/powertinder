@@ -13,8 +13,10 @@ angular.module('webtinFrontApp')
     init($resource, baseUrl, $scope);
 
     function init($resource, baseUrl, $scope) {
+      $scope.loading = true;
       var Matches = $resource(baseUrl + '/user/matches');
       Matches.get(function (response) {
+        $scope.loading = false;
         console.log(response);
         $scope.matches = response.matches;
       });
