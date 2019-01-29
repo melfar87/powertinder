@@ -71,7 +71,9 @@ public class UserController {
                 .header("User-Agent", Constant.USER_AGENT)
                 .build();
 
-        return restTemplate.exchange(request, Recs.class).getBody();
+        Recs recs = restTemplate.exchange(request, Recs.class).getBody();
+
+        return recs;
     }
 
     @ApiOperation(value = "Get the list of all your matches",

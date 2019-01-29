@@ -30,6 +30,9 @@ public class Person {
     @JsonProperty("birth_date")
     private String birthDate;
 
+    @JsonProperty("bio")
+    private String bio;
+
     @JsonProperty("photos")
     private List<Photo> photos;
 

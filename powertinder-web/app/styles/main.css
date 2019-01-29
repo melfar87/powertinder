@@ -9,7 +9,16 @@ body {
   padding: 0;
 }
 
-.top10 { margin-top:10px; }
+.top-space { margin-top:20px; }
+
+.bottom-space { margin-bottom: 20px; }
+
+.line {
+  border: 0;
+  background-color: #c9cbcc;
+  height: 1px;
+  margin-top:20px;
+}
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
@@ -93,6 +102,7 @@ body {
   .parentimage {
     width: 160px;
     height: 160px;
+    margin-top: 10px;
     -webkit-transition: all .3s ease-out;
     -moz-transition: all .3s ease-out;
     -o-transition: all .3s ease-out;
