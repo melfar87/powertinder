@@ -18,4 +18,16 @@ public class Match {
 
     @JsonProperty("person")
     private Person person;
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
 }

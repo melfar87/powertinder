@@ -37,6 +37,8 @@ public class AuthServiceFacebook implements AuthService{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceFacebook.class);
 
+    public static final int SLEEP_TIME = 500;
+
     private String fbUrl = "https://www.facebook.com/v2.6/dialog/oauth?redirect_uri=fb464891386855067%3A%2F%2Fauthorize%2F&display=touch&state=%7B%22challenge%22%3A%22IUUkEUqIGud332lfu%252BMJhxL4Wlc%253D%22%2C%220_auth_logger_id%22%3A%2230F06532-A1B9-4B10-BB28-B29956C71AB1%22%2C%22com.facebook.sdk_client_state%22%3Atrue%2C%223_method%22%3A%22sfvc_auth%22%7D&scope=user_birthday%2Cuser_photos%2Cuser_education_history%2Cemail%2Cuser_relationship_details%2Cuser_friends%2Cuser_work_history%2Cuser_likes&response_type=token%2Csigned_request&default_audience=friends&return_scopes=true&auth_type=rerequest&client_id=464891386855067&ret=login&sdk=ios&logger_id=30F06532-A1B9-4B10-BB28-B29956C71AB1&ext=1470840777&hash=AeZqkIcf-NEW6vBd";
 
     @Value("${facebook.id}")
@@ -147,19 +149,19 @@ public class AuthServiceFacebook implements AuthService{
         WebElement confirmButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.name("__CONFIRM__")));
 
         // Need to add sleep between instructions... It fails otherwise not sure why
-        Thread.sleep(1000);
+        Thread.sleep(SLEEP_TIME);
 
         LOGGER.info("Execute JS Script to be able to retrieve results from XHR requests");
         String externalJS = FileUtils.readFileToString(jsXhrInterceptor.getFile(), Charset.forName("UTF-8"));
         jsExecutor.executeScript(externalJS);
 
-        Thread.sleep(1000);
+        Thread.sleep(SLEEP_TIME);
 
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("interceptedResponse")));
 
         confirmButton.submit();
 
-        Thread.sleep(1000);
+        Thread.sleep(SLEEP_TIME);
 
         LOGGER.info("Wait for interceptedResponse element to be present with its ready attribute set to true");
         wait.until(ExpectedConditions.attributeContains(By.id("interceptedResponse"), "ready", "true"));

@@ -23,6 +23,7 @@ angular.module('webtinFrontApp')
       Recommendations.get(function (response) {
         console.log(response);
         $scope.recs = response.results;
+        updateRemainingLikes($resource, baseUrl, $scope);
         $scope.loading = false;
       });
     }
@@ -46,6 +47,8 @@ angular.module('webtinFrontApp')
         } else {
           found.match = false;
         }
+
+        updateRemainingLikes($resource, baseUrl, $scope);
 
       $scope.loading = false;
 
@@ -117,3 +120,13 @@ angular.module('webtinFrontApp')
     }
 
   }]);
+
+function updateRemainingLikes($resource, baseUrl, $scope) {
+  var Meta = $resource(baseUrl + '/user/meta');
+  Meta.get(function (response) {
+    console.log(response);
+    $scope.remainingLikes = response.rating.likes_remaining;
+    $scope.remainingSuperLikes = response.rating.super_likes.remaining;
+    $scope.resetsAt = response.rating.super_likes.resets_at;
+  });
+}

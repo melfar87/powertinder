@@ -42,15 +42,16 @@ documentation (http://localhost:8080/swagger-ui.html).
 
 Here is the summary of currently available operations :  
 
-| endpoint                 | description                                                              |
-|--------------------------|-------------------------------------------------------------------------|
-| /user/me                 | Get information about the currently logged user (you)                   |
-| /user/recs               | Get next set of recommendations                                         |
-| /user/matches            | Get the list of all your matches                                        |
-| /user/like/{userId}      | Like someone giving its user id                                         |
-| /user/superlike/{userId} | Super like someone giving its user id                                   |
-| /user/pass/{userId}      | Pass someone giving its user id                                         |
-| /user/position           | Update your current position by providing wanted latitude and longitude |
+| endpoint                 | description                                                                                |
+|--------------------------|--------------------------------------------------------------------------------------------|
+| /user/me                 | Get information about the currently logged user (you)                                      |
+| /user/meta               | Provides metadata about the currently logged user (you)                                    |
+| /user/recs               | Get next set of recommendations                                                            |
+| /user/matches            | Get the list of all your matches. List can be sorted on age, distance, match date, name    |
+| /user/like/{userId}      | Like someone giving its user id                                                            |
+| /user/superlike/{userId} | Super like someone giving its user id                                                      |
+| /user/pass/{userId}      | Pass someone giving its user id                                                            |
+| /user/position           | Update your current position by providing wanted latitude and longitude                    |
 
 
 

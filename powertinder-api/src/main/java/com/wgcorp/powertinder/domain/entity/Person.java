@@ -40,4 +40,11 @@ public class Person {
         return Period.between(LocalDate.parse(birthDate, DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)), LocalDate.now()).getYears();
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getDistanceMi() {
+        return distanceMi;
+    }
 }

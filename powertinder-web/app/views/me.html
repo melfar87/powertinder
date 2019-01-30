@@ -1,34 +1,46 @@
-<p>
-    {{me.name}}
+<form class="form-group">
+    <h3>{{me.name}}</h3>
     <br>
-    {{me.bio}}
+    <label>Bio : </label>
+    <span>{{me.bio}}</span>
     <br>
-    {{me.ping_time}}
+    <label>Ping Time : </label>
+    <span>{{me.ping_time}}</span>
     <br>
-    {{me.pos_info.city.name}}
+    <label>Distance Filter :</label>
+    <span>{{me.distance_filter}} mi</span>
     <br>
-    LAT: {{me.pos.lat}}
-    <br>
-    LON: {{me.pos.lon}}
-    <br>
-    Distance Filter : {{me.distance_filter}}
-    <br>
-    Age : {{me.age_filter_min}} - {{me.age_filter_max}}
-</p>
-
-<form ng-submit="updatePosition()">
-    <div class="form-group">
-        <label for="lat">Latitude</label>
-        <input type="text" class="form-control" id="lat" placeholder="Latitude" ng-model="pos.lat">
-    </div>
-    <div class="form-group">
-        <label for="lon">Longitude</label>
-        <input type="text" class="form-control" id="lon" placeholder="Longitude" ng-model="pos.lon">
-    </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <label>Age : </label>
+    <span>{{me.age_filter_min}} - {{me.age_filter_max}}</span>
 </form>
 
-<p></p>
-<div class="col-md-6 col-lg-3 col-xl-3" ng-repeat="photo in me.photos">
+<div class="row col-md-12">
+    <div class="row col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">POSITION</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="city_label">City : </label>
+                    <span id="city_label">{{me.pos_info.city.name}}</span>
+                    <br>
+                    <label for="position">Position : </label>
+                    <span id="position">{{me.pos.lat}} {{me.pos.lon}}</span>
+                    <br>
+
+                    <form ng-submit="updatePosition()" class="form-inline">
+                        <label for="lat">Position : </label>
+                        <input type="text" class="form-control" id="lat" placeholder="{{me.pos.lat}}" ng-model="pos.lat">
+                        <input type="text" class="form-control" id="lon" placeholder="{{me.pos.lon}}" ng-model="pos.lon">
+                        <button type="submit" class="btn btn-default">Update Position</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+
+<div class="row col-md-3 col-lg-2 top-space" ng-repeat="photo in me.photos">
     </a><img ng-src="{{photo.processedFiles[0].url}}" class="img-rounded parentimage" />
 </div>
