@@ -121,6 +121,7 @@ angular.module('webtinFrontApp')
 
   }]);
 
+  // todo not needed since remaining like already in the like response
 function updateRemainingLikes($resource, baseUrl, $scope) {
   var Meta = $resource(baseUrl + '/user/meta');
   Meta.get(function (response) {

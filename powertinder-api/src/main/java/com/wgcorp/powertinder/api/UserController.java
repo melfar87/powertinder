@@ -4,6 +4,7 @@ import com.wgcorp.powertinder.Constant;
 import com.wgcorp.powertinder.domain.entity.*;
 import com.wgcorp.powertinder.domain.request.FindMatchesRequest;
 import com.wgcorp.powertinder.domain.request.UpdatePositionRequest;
+import com.wgcorp.powertinder.domain.response.DetailResponse;
 import com.wgcorp.powertinder.domain.response.LikeResponse;
 import com.wgcorp.powertinder.domain.response.SuperLikeReponse;
 import com.wgcorp.powertinder.security.AuthService;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 
@@ -61,6 +62,20 @@ public class UserController {
 
         URI uri = UriComponentsBuilder.fromUriString(baseUri).path("/meta").build().toUri();
         return restTemplate.exchange(this.buildDefaultGetRequestEntity(uri), Meta.class).getBody();
+    }
+
+    // TODO caching not working on local calls
+    @ApiOperation(value = "Get detail about a user providing its id",
+            response = Recs.class)
+    @GetMapping("/user/{userId}")
+    @Cacheable("user")
+    public Person user(@ApiParam(value = "unique id of the user you want to like", required = true) @PathVariable("userId") String userId) throws IOException {
+        LOGGER.debug("Calling /user/{} endpoint", userId);
+
+        URI uri = UriComponentsBuilder.fromUriString(baseUri).path("/user/{userId}").buildAndExpand(userId).toUri();
+        DetailResponse response = restTemplate.exchange(this.buildDefaultGetRequestEntity(uri), DetailResponse.class).getBody();
+
+        return response.getPerson();
     }
 
     @ApiOperation(value = "Get next set of recommendations",
@@ -105,9 +120,16 @@ public class UserController {
             }
         }
 
+        // get the details for each match
+        for (Match match : matchList.getMatches()) {
+            Person p = this.user(match.getPerson().getId());
+            match.setPerson(p);
+        }
+
         return matchList;
     }
 
+    // TODO no need to get meta for remaining like
     @ApiOperation(value = "Like someone",
             response = Like.class)
     @GetMapping("/user/like/{userId}")
@@ -115,7 +137,14 @@ public class UserController {
         LOGGER.debug("Calling /like/{} endpoint", userId);
 
         URI uri = UriComponentsBuilder.fromUriString(baseUri).path("/like/{userId}").buildAndExpand(userId).toUri();
-        LikeResponse response = restTemplate.exchange(this.buildDefaultGetRequestEntity(uri), LikeResponse.class).getBody();
+
+        // Need to use header "Content" instead of "Content-Type"
+        RequestEntity entity = RequestEntity.get(uri)
+                .header("X-Auth-Token", authService.xAuthToken())
+                .header("Content", MediaType.APPLICATION_JSON.toString())
+                .build();
+
+        LikeResponse response = restTemplate.exchange(entity, LikeResponse.class).getBody();
 
         // TODO write custom serializer here instead
         Like like = new Like();
@@ -127,6 +156,7 @@ public class UserController {
                 like.setMatch(true);
                 like.setCreatedDate((String) matchElement.get("created_date"));
             }
+            like.setLikesRemaining(response.getLikesRemaining());
         }
 
         return like;
@@ -139,7 +169,14 @@ public class UserController {
         LOGGER.debug("Calling /superlike/{} endpoint", userId);
 
         URI uri = UriComponentsBuilder.fromUriString(baseUri).path("/like/{userId}/super").buildAndExpand(userId).toUri();
-        return restTemplate.exchange(this.buildDefaultPostRequestEntity(uri).build(), SuperLikeReponse.class).getBody();
+
+        // Need to use header "Content" instead of "Content-Type"
+        RequestEntity entity = RequestEntity.get(uri)
+                .header("X-Auth-Token", authService.xAuthToken())
+                .header("Content", MediaType.APPLICATION_JSON.toString())
+                .build();
+
+        return restTemplate.exchange(entity, SuperLikeReponse.class).getBody();
     }
 
     @ApiOperation(value = "Pass someone",
@@ -169,11 +206,10 @@ public class UserController {
                 .header("User-Agent", Constant.USER_AGENT);
     }
 
-    private RequestEntity<Void> buildDefaultGetRequestEntity(URI uri) throws IOException {
+    private RequestEntity buildDefaultGetRequestEntity(URI uri) throws IOException {
         return RequestEntity.get(uri)
                 .header("X-Auth-Token", authService.xAuthToken())
                 .header("Content-Type", MediaType.APPLICATION_JSON.toString())
-                .header("User-Agent", Constant.USER_AGENT)
                 .build();
     }
 }

@@ -1,27 +1,23 @@
 <div class="row col-md-12">
-    <div class="row col-md-3">
+  <div class="col-md-3">
     <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="refresh()">
-        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> REFRESH
+      <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> REFRESH
     </button>
-
-    <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Sort By <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li><a href="#">Age</a></li>
-            <li><a href="#">Distance</a></li>
-            <li><a href="#">Date</a></li>
-            <li><a href="#">Name</a></li>
-        </ul>
-    </div>
     <img ng-src="images/spinner.gif" class="loader" ng-show="loading">
-</div>
+    </div>
+
+  <div class="col-md-3">
+    <span>Sort By</span>
+    <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="sort('person.age')">AGE</button>
+    <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="sort('person.distance_mi')">
+      DISTANCE
+    </button>
+  </div>
 </div>
 
-<div class="row top-space col-lg-12 col-md-12" ng-repeat="item in matches">
+<div class="row top-space col-lg-12 col-md-12" ng-repeat="item in matches | orderBy : sortCriteria">
     <div class="panel panel-default">
-        <div class="panel-heading">{{item.person.name}} {{item.person.age}}</div>
+      <div class="panel-heading">{{item.person.name}} {{item.person.age}} [{{item.person.distance_mi}}]</div>
         <div class="panel-body">
 
             <div class="row col-md-12 col-lg-12">

@@ -36,6 +36,10 @@ public class Person {
     @JsonProperty("photos")
     private List<Photo> photos;
 
+    public String getId() {
+        return id;
+    }
+
     public int getAge() {
         return Period.between(LocalDate.parse(birthDate, DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)), LocalDate.now()).getYears();
     }

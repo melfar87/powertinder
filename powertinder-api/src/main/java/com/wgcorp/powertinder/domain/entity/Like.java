@@ -10,6 +10,9 @@ public class Like {
     @JsonProperty("created_date")
     private String createdDate;
 
+    @JsonProperty("likes_remaining")
+    private int likesRemaining;
+
     public Boolean getMatch() {
         return match;
     }
@@ -24,5 +27,13 @@ public class Like {
 
     public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public int getLikesRemaining() {
+        return likesRemaining;
+    }
+
+    public void setLikesRemaining(int likesRemaining) {
+        this.likesRemaining = likesRemaining;
     }
 }
