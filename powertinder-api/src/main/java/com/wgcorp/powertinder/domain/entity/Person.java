@@ -3,6 +3,8 @@ package com.wgcorp.powertinder.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -50,5 +52,12 @@ public class Person {
 
     public int getDistanceMi() {
         return distanceMi;
+    }
+
+    @JsonProperty("distance_km")
+    public double getDistanceKm() {
+        BigDecimal bd = new BigDecimal(Double.toString(distanceMi * 1.60934));
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }

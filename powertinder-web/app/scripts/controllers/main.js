@@ -48,10 +48,9 @@ angular.module('webtinFrontApp')
           found.match = false;
         }
 
-        updateRemainingLikes($resource, baseUrl, $scope);
+        $scope.remainingLikes = response.likes_remaining;
 
-      $scope.loading = false;
-
+        $scope.loading = false;
       })
     }
 
@@ -92,7 +91,8 @@ angular.module('webtinFrontApp')
         }
 
         $scope.loading = false;
-
+        $scope.remainingSuperLikes = response.super_likes.remaining;
+        $scope.resetsAt = response.resets_at;
       })
     }
 
@@ -121,7 +121,6 @@ angular.module('webtinFrontApp')
 
   }]);
 
-  // todo not needed since remaining like already in the like response
 function updateRemainingLikes($resource, baseUrl, $scope) {
   var Meta = $resource(baseUrl + '/user/meta');
   Meta.get(function (response) {

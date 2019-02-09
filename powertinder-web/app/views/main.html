@@ -5,7 +5,7 @@
   <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="likeAll()" ng-disabled="recs == null">
     <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Like ALL
   </button>
-  <span class="badge badge-info">{{remainingSuperLikes}}</span>
+  <span class="badge badge-info" title="super likes remaining">{{remainingSuperLikes}}</span>
   <span class="badge badge-success" title="likes remaining">{{remainingLikes}}</span>
   <img ng-src="images/spinner.gif" class="loader" ng-show="loading">
 </div>
@@ -68,7 +68,7 @@
   <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="likeAll()" ng-disabled="recs == null">
     <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Like ALL
   </button>
-  <span title="super like remaining" class="badge badge-info">{{remainingSuperLikes}}</span>
+  <span class="badge badge-info" title="super likes remaining">{{remainingSuperLikes}}</span>
   <span title="likes remaining" class="badge badge-success">{{remainingLikes}}</span>
   <img ng-src="images/spinner.gif" class="loader" ng-show="loading">
 </div>

@@ -10,11 +10,10 @@ spring:
     livereload:
       enabled: false
 
-# User infos required in order to get the tinder api access_token
-facebook:
-  id:
-  email:
-  password:
+logging:
+  level:
+    root: WARN
+    com.wgcorp: DEBUG
 
 ---
 spring.profiles: dev

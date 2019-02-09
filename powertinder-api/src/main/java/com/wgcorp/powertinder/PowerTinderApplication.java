@@ -16,4 +16,5 @@ public class PowerTinderApplication {
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
 	}
+
 }

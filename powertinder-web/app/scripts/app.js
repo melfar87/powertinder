@@ -15,7 +15,8 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'ui-leaflet'
   ])
   .constant('baseUrl', 'http://localhost:8080')
   .config(function ($routeProvider) {
