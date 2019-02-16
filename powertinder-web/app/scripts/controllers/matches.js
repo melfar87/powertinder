@@ -11,6 +11,8 @@ angular.module('webtinFrontApp')
   .controller('MatchesCtrl', ['$resource', '$scope', 'baseUrl', function ($resource, $scope, baseUrl) {
 
     $scope.sortCriteria = 'person.age';
+    $scope.sortOrder = false;
+    $scope.matches = [];
 
     init($resource, baseUrl, $scope);
 
@@ -31,6 +33,7 @@ angular.module('webtinFrontApp')
 
     $scope.sort = function (criteria) {
       $scope.sortCriteria = criteria;
+      $scope.sortOrder = !$scope.sortOrder;
     }
 
   }]);

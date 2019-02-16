@@ -63,11 +63,13 @@ public class AuthServiceFacebook implements AuthService{
 
     private String facebookToken;
 
+    @Value("${tinderapi.xAuthToken}")
     private String xAuthToken;
 
     @PostConstruct
-    public void init() {
+    public void init() throws IOException {
         LOGGER.info("Init authentication service with following parameters : facebook.id='{}' - facebook.email='{}'", facebookId, facebookEmail);
+        xAuthToken();
     }
 
     @Override

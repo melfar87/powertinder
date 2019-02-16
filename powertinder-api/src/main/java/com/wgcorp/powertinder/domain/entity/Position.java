@@ -3,6 +3,15 @@ package com.wgcorp.powertinder.domain.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Position {
+
+    public Position() {
+    }
+
+    public Position(Double lat, Double lon) {
+        this.lat = lat;
+        this.lon = lon;
+    }
+
     @JsonProperty("at")
     private Double at;
 

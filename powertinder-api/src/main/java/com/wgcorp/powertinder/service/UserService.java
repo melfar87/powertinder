@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +32,7 @@ import java.util.Map;
 public class UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+    private static final int WAIT_TIME = 5000;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -55,8 +56,8 @@ public class UserService {
         return restTemplate.exchange(this.buildDefaultGetRequestEntity(uri), Meta.class).getBody();
     }
 
-    //    @Cacheable("user")
-    public Person user(String userId) throws IOException {
+    @Cacheable(value = "user", condition = "#enableCaching")
+    public Person user(String userId, boolean enableCaching) throws IOException {
         LOGGER.debug("Get detail for user with id {}", userId);
 
         URI uri = UriComponentsBuilder.fromUriString(baseUri).path("/user/{userId}").buildAndExpand(userId).toUri();
@@ -154,62 +155,48 @@ public class UserService {
     }
 
     public Position locateUser(String userId) throws IOException, InterruptedException {
-
         // get my profile with my position
         Profile me = this.me();
 
         // get profile of user with distance
-        Person userP1 = this.user(userId);
+        Person userP1 = this.user(userId, false);
         Position p1 = me.getPos();
         p1.setAt(0.0);
         double d1 = userP1.getDistanceKm();
 
         // compute new points (NORTH, SOUTH, WEST, EAST)
-        Position p2 = trilaterationService.destinationPoint(me.getPos(), userP1.getDistanceKm() * 1000, 0);
-        p2.setAt(0.0);
-        UpdatePositionRequest updatePositionRequest1 = new UpdatePositionRequest();
-        updatePositionRequest1.setPosition(p2);
-        this.position(updatePositionRequest1);
-        Thread.sleep(15000);
-        MatchList matches1 = this.matches(null);
-//        Optional<Match> match = matches1.getMatches().stream().filter(m -> m.getPerson().getId().equals(userId)).findFirst();
-        double d2 = this.user(userId).getDistanceKm();
+        VirtualPosition vp1 = this.virtualPosition(userId, me.getPos(), userP1.getDistanceKm(), 0);
+        VirtualPosition vp2 = this.virtualPosition(userId, me.getPos(), userP1.getDistanceKm() * 1.5, 90);
+        VirtualPosition vp3 = this.virtualPosition(userId, me.getPos(), userP1.getDistanceKm(), 180);
+        VirtualPosition vp4 = this.virtualPosition(userId, me.getPos(), userP1.getDistanceKm() * 1.5, 220);
 
-        Position p3 = trilaterationService.destinationPoint(me.getPos(), userP1.getDistanceKm() * 1000, 90);
-        p3.setAt(0.0);
-        UpdatePositionRequest updatePositionRequest2 = new UpdatePositionRequest();
-        updatePositionRequest2.setPosition(p3);
-        this.position(updatePositionRequest2);
-        Thread.sleep(15000);
-        MatchList matches2 = this.matches(null);
-//        Optional<Match> match2 = matches2.getMatches().stream().filter(m -> m.getPerson().getId().equals(userId)).findFirst();
-        double d3 = this.user(userId).getDistanceKm();
-
-        Position p4 = trilaterationService.destinationPoint(me.getPos(), userP1.getDistanceKm() * 1000, 180);
-        p4.setAt(0.0);
-        UpdatePositionRequest updatePositionRequest3 = new UpdatePositionRequest();
-        updatePositionRequest3.setPosition(p4);
-        this.position(updatePositionRequest3);
-        Thread.sleep(15000);
-        MatchList matches3 = this.matches(null);
-//        Optional<Match> match3 = matches3.getMatches().stream().filter(m -> m.getPerson().getId().equals(userId)).findFirst();
-        double d4 = this.user(userId).getDistanceKm();
-
-        // set back to inital position
+        LOGGER.debug("Move back to initial position");
         UpdatePositionRequest updatePositionRequest = new UpdatePositionRequest();
         updatePositionRequest.setPosition(me.getPos());
         this.position(updatePositionRequest);
 
         // compute position
-        List<Position> positions = new ArrayList<>();
-        positions.add(p1);
-        positions.add(p2);
-        positions.add(p3);
-        positions.add(p4);
-        double[] distances = {d1, d2, d3, d4};
-        Position approximateLocation = trilaterationService.approximateLocation(positions, distances);
+        double[] distances = {d1, vp1.distance, vp2.distance, vp3.distance, vp4.distance};
+        return trilaterationService.approximateLocation(List.of(p1, vp1.pos, vp2.pos, vp3.pos, vp4.pos), distances);
+    }
 
-        return approximateLocation;
+    private VirtualPosition virtualPosition(String userId, Position pos, double distance, int bearing) throws IOException, InterruptedException {
+        LOGGER.debug("Compute a new virtual location from {},{} / distance: {} km / bearing: {} degrees", pos.getLat(), pos.getLon(), distance, bearing);
+        Position virtualPos = trilaterationService.destinationPoint(pos, distance * 1000, bearing);
+
+        LOGGER.debug("Update position to virtual position {},{}", virtualPos.getLat(), virtualPos.getLon(), distance, bearing);
+        UpdatePositionRequest updatePositionRequest = new UpdatePositionRequest();
+        updatePositionRequest.setPosition(virtualPos);
+        this.position(updatePositionRequest);
+
+        LOGGER.debug("Has to wait some time for the target position to be updated... {} ms", WAIT_TIME);
+        Thread.sleep(WAIT_TIME);
+
+        LOGGER.debug("Get new distance from target with id {}", userId);
+        double distanceFromTarget = this.user(userId, false).getDistanceKm();
+
+        LOGGER.debug("New virtual position from target computed: {},{} at {}km", virtualPos.getLat(), virtualPos.getLon(), distanceFromTarget);
+        return new VirtualPosition(virtualPos, distanceFromTarget);
     }
 
     private RequestEntity.BodyBuilder buildDefaultPostRequestEntity(URI uri) throws IOException {
@@ -224,5 +211,15 @@ public class UserService {
                 .header("X-Auth-Token", authService.xAuthToken())
                 .header("Content-Type", MediaType.APPLICATION_JSON.toString())
                 .build();
+    }
+
+    class VirtualPosition {
+        Position pos;
+        Double distance;
+
+        public VirtualPosition(Position pos, Double distance) {
+            this.pos = pos;
+            this.distance = distance;
+        }
     }
 }

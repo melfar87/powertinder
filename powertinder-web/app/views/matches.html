@@ -12,12 +12,20 @@
     <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="sort('person.distance_mi')">
       DISTANCE
     </button>
+    <button type="button" class="btn btn-default" aria-label="Left Align" ng-click="sort('created_date')">
+      MATCH DATE
+    </button>
   </div>
 </div>
 
-<div class="row top-space col-lg-12 col-md-12" ng-repeat="item in matches | orderBy : sortCriteria">
+<div class="row top-space col-lg-12 col-md-12" ng-repeat="item in matches | orderBy : sortCriteria : sortOrder">
     <div class="panel panel-default">
-      <div class="panel-heading">{{item.person.name}} {{item.person.age}} [{{item.person.distance_km}} Km]</div>
+      <div class="panel-heading">
+        <span>{{item.person.name}} {{item.person.age}}</span> -
+        <span>[{{item.person.distance_km}} Km]</span> -
+        <span>{{item.created_date | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+
+      </div>
         <div class="panel-body">
 
             <div class="row col-md-12 col-lg-12">

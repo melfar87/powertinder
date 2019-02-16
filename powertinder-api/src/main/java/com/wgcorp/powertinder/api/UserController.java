@@ -2,6 +2,7 @@ package com.wgcorp.powertinder.api;
 
 import com.wgcorp.powertinder.domain.entity.*;
 import com.wgcorp.powertinder.domain.request.UpdatePositionRequest;
+import com.wgcorp.powertinder.domain.response.LocateResponse;
 import com.wgcorp.powertinder.domain.response.SuperLikeReponse;
 import com.wgcorp.powertinder.service.UserService;
 import io.swagger.annotations.Api;
@@ -46,7 +47,7 @@ public class UserController {
     @GetMapping("/user/{userId}")
     public Person user(@ApiParam(value = "unique id of the user you want to like", required = true) @PathVariable("userId") String userId) throws IOException {
         LOGGER.debug("Calling /user/{} endpoint", userId);
-        return userService.user(userId);
+        return userService.user(userId, false);
     }
 
     @ApiOperation(value = "Get next set of recommendations", response = Recs.class)
@@ -67,7 +68,7 @@ public class UserController {
 
         // set the details for each match
         for (Match match : matchList.getMatches()) {
-            match.setPerson(userService.user(match.getPerson().getId()));
+            match.setPerson(userService.user(match.getPerson().getId(), true));
         }
 
         return matchList;
@@ -93,9 +94,10 @@ public class UserController {
     @ApiOperation(value = "Appromimate location of someone using trilateration",
             response = String.class)
     @GetMapping("/user/locate/{userId}")
-    public Position locate(@PathVariable("userId") String userId) throws IOException, InterruptedException {
+    public LocateResponse locate(@PathVariable("userId") String userId) throws IOException, InterruptedException {
         LOGGER.debug("Calling /locate/{} endpoint", userId);
-        return userService.locateUser(userId);
+        Position position = userService.locateUser(userId);
+        return new LocateResponse(position);
     }
 
     @ApiOperation(value = "Pass someone",
