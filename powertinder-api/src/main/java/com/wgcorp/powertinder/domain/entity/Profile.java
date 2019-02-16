@@ -57,4 +57,12 @@ public class Profile {
     public void setApiToken(String apiToken) {
         this.apiToken = apiToken;
     }
+
+    public Position getPos() {
+        return pos;
+    }
+
+    public void setPos(Position pos) {
+        this.pos = pos;
+    }
 }

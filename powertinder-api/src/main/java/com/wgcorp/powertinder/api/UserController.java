@@ -90,6 +90,14 @@ public class UserController {
         return userService.superLike(userId);
     }
 
+    @ApiOperation(value = "Appromimate location of someone using trilateration",
+            response = String.class)
+    @GetMapping("/user/locate/{userId}")
+    public Position locate(@PathVariable("userId") String userId) throws IOException, InterruptedException {
+        LOGGER.debug("Calling /locate/{} endpoint", userId);
+        return userService.locateUser(userId);
+    }
+
     @ApiOperation(value = "Pass someone",
             response = String.class)
     @GetMapping("/user/pass/{userId}")
@@ -105,6 +113,5 @@ public class UserController {
         LOGGER.debug("Calling /position endpoint with coordinates {}-{}", updatePositionRequest.getLat(), updatePositionRequest.getLon());
         return userService.position(updatePositionRequest);
     }
-
 
 }
