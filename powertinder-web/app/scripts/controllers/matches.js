@@ -36,6 +36,25 @@ angular.module('webtinFrontApp')
       $scope.sortOrder = !$scope.sortOrder;
     }
 
+    $scope.locate = function (id) {
+      var Locate = $resource(baseUrl + '/user/locate/:userId');
+      
+      var found = $scope.matches.find(function (element) {
+        debugger
+        if (element.person._id === id) {
+          element.person.searchingUser = true;
+
+          Locate.get({ userId: id }, function (response) {
+            console.log(response);
+            element.person.mapsUrl = response.mapsUrl;  
+            element.person.searchingUser = false;  
+          });
+        }
+      });
+
+
+    }
+
   }]);
 
 

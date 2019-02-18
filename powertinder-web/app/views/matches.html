@@ -21,10 +21,15 @@
 <div class="row top-space col-lg-12 col-md-12" ng-repeat="item in matches | orderBy : sortCriteria : sortOrder">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <span>{{item.person.name}} {{item.person.age}}</span> -
-        <span>[{{item.person.distance_km}} Km]</span> -
-        <span>{{item.created_date | date:'yyyy-MM-dd HH:mm:ss'}}</span>
-
+        <span>{{item.person.name}} {{item.person.age}}</span> |
+        <span>[{{item.person.distance_km}} Km]</span> |
+        <span>{{item.created_date | date:'yyyy-MM-dd HH:mm:ss'}}</span> |
+        <span>{{item.person._id}}</span> |
+        <button type="button" class="btn btn-default" ng-click="locate(item.person._id)">
+          <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> LOCATE USER
+        </button>
+        <img ng-src="images/spinner.gif" class="loader" ng-show="item.person.searchingUser">
+        <a href="{{item.person.mapsUrl}}">{{item.person.mapsUrl}}</a>
       </div>
         <div class="panel-body">
 

@@ -1,5 +1,12 @@
+# User infos required in order to get the tinder api access_token
+facebook:
+  id:
+  email:
+  password:
+
 tinderapi:
   baseuri: https://api.gotinder.com
+  xAuthToken:
 
 server:
   servlet:

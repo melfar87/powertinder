@@ -6,6 +6,7 @@ facebook:
 
 tinderapi:
   baseuri: https://api.gotinder.com
+  xAuthToken:
 
 server:
   servlet:

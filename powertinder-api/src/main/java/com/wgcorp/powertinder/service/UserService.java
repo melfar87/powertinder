@@ -32,7 +32,7 @@ import java.util.Map;
 public class UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
-    private static final int WAIT_TIME = 5000;
+    private static final int WAIT_TIME = 10000;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -181,6 +181,8 @@ public class UserService {
     }
 
     private VirtualPosition virtualPosition(String userId, Position pos, double distance, int bearing) throws IOException, InterruptedException {
+        // TODO check if position is not too far away from initial location, otherwise it will fail
+
         LOGGER.debug("Compute a new virtual location from {},{} / distance: {} km / bearing: {} degrees", pos.getLat(), pos.getLon(), distance, bearing);
         Position virtualPos = trilaterationService.destinationPoint(pos, distance * 1000, bearing);
 
